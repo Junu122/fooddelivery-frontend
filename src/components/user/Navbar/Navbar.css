@@ -10,7 +10,9 @@
     z-index: 100;
     transition: all 0.3s ease;
   }
-  
+  .hide-logo{
+    display: none;
+  }
   .navbar .logo {
     width: 150px;
     transition: transform 0.3s ease;
@@ -95,7 +97,7 @@
     color: #49557e;
     border: 2px solid tomato;
     background: transparent;
-    padding: 10px 30px;
+    padding: 6px 20px;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -267,9 +269,20 @@
     height: 100vh;
     background-color: white;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    padding: 80px 20px 20px;
+    padding: 30px 20px 20px;
     transition: right 0.3s ease;
     z-index: 150;
+  }
+  .mobile-menu button {
+    font-size: 16px;
+    font-weight: 600;
+    color: #49557e;
+    border: 2px solid tomato;
+    background: transparent;
+    padding: 6px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
   
   .mobile-menu.active {
@@ -293,6 +306,12 @@
   }
   
   /* Responsive styles */
+
+  @media(max-width:330px){
+    .mobile-menu img{
+      width: 130px;
+    }
+  }
   @media (max-width: 1050px) {
     .navbar {
       padding: 15px 20px;
@@ -337,7 +356,7 @@
     
     .navbar button {
       padding: 8px 22px;
-      font-size: 14px;
+      font-size: 11px;
     }
   }
   
@@ -383,15 +402,20 @@
     
     .navbar-right {
       gap: 12px;
+      
     }
-    
+    .navbar-basket-icon{
+      margin-right: 10px;
+      margin-top: 4px;
+    }
     .navbar-right img {
       width: 20px;
     }
     
     .navbar button {
-      padding: 6px 15px;
-      font-size: 13px;
+      /* padding: 6px 15px;
+      font-size: 13px; */
+      display: none;
     }
     
     .nav-profile-dropdown {

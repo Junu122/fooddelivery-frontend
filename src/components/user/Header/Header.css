@@ -48,13 +48,32 @@
 }
 @media(max-width:750px){
     .header-contents{
-        max-width: 65%;
+        max-width: 90%;
     }
     .header-contents p{
         display: none;
     }
     .header-contents button{
         padding: 2vw,4vw;
+    }
+}
+
+@media(max-width:480px){
+    .header{
+        height:77vw;
+       margin: 0 ;
+       padding: 0;
+    }
+    .header-contents{
+        height: 100%;
+        max-width: 90%;
+        gap:6px;
+        align-items: start;
+        justify-content: center;
+    }
+    .header-contents h2{
+    
+     font-size: 20px;
     }
 }
 

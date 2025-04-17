@@ -60,3 +60,17 @@
         font-size: 14px;
     }
 }
+
+@media(max-width:480px){
+  .explore-menu h1{
+    margin-left: 5px;
+    margin-top: 5px;
+  }
+  .explore-menu-text{
+    margin-left: 5px;
+    max-width: 100%;
+  }
+  .explore-menu-list{
+    padding: 2px;
+  }
+}

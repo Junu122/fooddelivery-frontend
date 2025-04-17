@@ -4,16 +4,19 @@ import { assets } from "../../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { Storecontext } from "../../../Context/StoreContext";
 
-const Navbar = ({ setshowlogin }) => {
+const  Navbar = ({ setshowlogin }) => {
+  const navigate=useNavigate()
   const [menu, setmenu] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [token,settoken]=useState(false)
-  const { gettotalcartamount,   } = useContext(Storecontext);
+  
+  const { gettotalcartamount,token,settoken   } = useContext(Storecontext);
  
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
+    settoken("")
+    navigate("/")
    
 
   };
@@ -44,17 +47,18 @@ const Navbar = ({ setshowlogin }) => {
     <>
       <div className={`navbar ${isScrolled ? "scrolled" : ""}`}>
         <Link to={"/"}>
-          <img src={assets.logo} alt="Food App Logo" className="logo" />
+          <img src={assets.logo} alt="Food App Logo" className={`logo ${mobileMenuOpen?"hide-logo":""}`} />
         </Link>
         
         <ul className="navbar-menu">
-          <Link
-            to={"/"}
+          <a
+            
+            href="#header"
             onClick={() => setmenu("home")}
             className={menu === "home" ? "active" : ""}
           >
             Home
-          </Link>
+          </a>
           <a
             href="#explore-menu"
             onClick={() => setmenu("menu")}
@@ -88,7 +92,7 @@ const Navbar = ({ setshowlogin }) => {
           </div>
           
           {!token ? (
-            <button onClick={() => setshowlogin(true)}>Sign-In</button>
+            <button onClick={() =>{navigate("/login")} }>Sign-In</button>
           ) : (
             <div className="navbar-profile">
               <img src={assets.profile_icon} alt="Profile" />
@@ -121,6 +125,9 @@ const Navbar = ({ setshowlogin }) => {
       
       {/* Mobile Menu */}
       <div className={`mobile-menu ${mobileMenuOpen ? "active" : ""}`}>
+      <Link to={"/"}>
+          <img src={assets.logo} alt="Food App Logo" className="logo" />
+        </Link>
         <Link
           to={"/"}
           onClick={() => handleMenuClick("home")}
@@ -149,8 +156,10 @@ const Navbar = ({ setshowlogin }) => {
         >
           Contact-Us
         </a>
+      
+       
         
-        {token && (
+        {token ?(
           <>
             <hr />
             <Link
@@ -161,7 +170,7 @@ const Navbar = ({ setshowlogin }) => {
             </Link>
             <a href="#" onClick={logout}>Logout</a>
           </>
-        )}
+        ): <button onClick={() => setshowlogin(true)}>Sign-In</button>}
       </div>
       
       {/* Overlay for mobile menu */}

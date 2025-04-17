@@ -5,11 +5,11 @@ import { userServices } from "../services/userServices";
 const Storecontextprovider = (props) => {
   const [cartitems, setcartitems] = useState({});
   const [token,settoken]=useState("")
-//   const [food_list,setfoodlist]=useState([])
+
   
 
 const [food_lists,setfoodlists]=useState([])
- //add to cart
+ 
   const addtocart = async(itemId) => {
     if (!cartitems[itemId]) {
       setcartitems((prev) => ({ ...prev, [itemId]: 1 }));
@@ -70,10 +70,15 @@ const fetchfoodlist=async()=>{
 
 
 
+
+
  useEffect(()=>{
   async function loaddata(){
     await fetchfoodlist()
- 
+    const token=localStorage.getItem("userToken")
+    if(token){
+      settoken(token)
+    }
   }
   loaddata()
 

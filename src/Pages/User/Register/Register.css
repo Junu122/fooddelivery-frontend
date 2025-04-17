@@ -1,0 +1,100 @@
+.register-popup {
+    position: fixed;
+    z-index: 999; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: grid;
+    overflow: hidden; 
+}
+
+.register-popup-container {
+    place-self: center;
+    width: max(23vw, 330px);
+    color: #808080;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 25px 30px;
+    border-radius: 8px;
+    font-size: 14px;
+    animation: fadeIn 0.5s;
+    max-height: 90vh; 
+    overflow-y: auto; 
+}
+.error-text{
+    color: red;
+}
+.error-style{
+    border-color: rgba(213, 16, 16, 0.859);
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.737); 
+    outline: none;
+   
+    
+}
+.register-popup-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+}
+
+.register-popup-title img {
+    width: 16px;
+    cursor: pointer;
+}
+
+.register-popup-input {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.register-popup-input .input-style {
+    outline: none;
+    border: 1px solid #c9c9c9;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.register-popup-container button {
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    background-color: tomato;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.register-popup-condition {
+    display: flex;
+    align-items: start;
+    gap: 8px;
+    margin-top: -15px;
+}
+
+.register-popup-condition input {
+    margin-top: 5px;
+}
+
+.register-popup p span {
+    color: tomato;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Add fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

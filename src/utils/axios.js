@@ -10,7 +10,7 @@ const userAxiosInstance = axios.create({
   baseURL: 'http://localhost:4000/api/auth',
   
   // Request timeout in milliseconds (5 seconds)
-  timeout: 5000,
+  timeout: 15000,
   
   // Default headers
   headers: {
@@ -22,16 +22,13 @@ const userAxiosInstance = axios.create({
 // Request interceptor
 userAxiosInstance.interceptors.request.use(
   config => {
-    // You can modify request config here before sending
-    // For example, add an auth token from localStorage
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('userToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   error => {
-    // Handle request errors
     return Promise.reject(error);
   }
 );
@@ -39,7 +36,7 @@ userAxiosInstance.interceptors.request.use(
 // Response interceptor
 userAxiosInstance.interceptors.response.use(
   response => {
-    // Any status code within the range of 2xx
+   
     return response;
   },
   error => {
