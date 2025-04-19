@@ -121,8 +121,9 @@
   
   .navbar-basket-icon .dot {
     position: absolute;
-    min-width: 12px;
-    min-height: 12px;
+    min-width: 20px;
+    min-height: 16px;
+    text-align: center;
     background-color: tomato;
     border-radius: 50%;
     top: -8px;

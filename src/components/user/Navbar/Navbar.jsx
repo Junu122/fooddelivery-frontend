@@ -10,15 +10,13 @@ const  Navbar = ({ setshowlogin }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
-  const { gettotalcartamount,token,settoken   } = useContext(Storecontext);
- 
-
-  const logout = () => {
+  const { gettotalcartamount,token,settoken ,cartitems, setcartitems } = useContext(Storecontext);
+console.log(cartitems,"cartitems")
+   const logout = () => {
     localStorage.removeItem("userToken");
+    setcartitems("")
     settoken("")
     navigate("/")
-   
-
   };
 
   // Close mobile menu when clicking on a link
@@ -88,7 +86,18 @@ const  Navbar = ({ setshowlogin }) => {
             <Link to={"/cart"}>
               <img src={assets.basket_icon} alt="Cart" />
             </Link>
-            <div className={gettotalcartamount() === 0 ? "" : "dot"}></div>
+          
+            {/* {Object.keys(cartitems).length > 0 && (
+          
+              )} */}
+              {
+                cartitems?.items?.length> 0 && (
+                  <div className="dot">
+                 {cartitems?.items?.length}
+               </div>
+                )
+              }
+         
           </div>
           
           {!token ? (

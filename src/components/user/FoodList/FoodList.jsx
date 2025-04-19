@@ -6,17 +6,27 @@ import { Storecontext } from '../../../Context/StoreContext';
 
 function FoodList({ id, price, name, image, description, category }) {
   const {cartitems,addtocart,removefromcart}=useContext(Storecontext)
+  const cartItem = cartitems?.items?.find(item => item.itemId === id);
+  const quantity = cartItem ? cartItem.quantity : 0;
   return (
     <div className='food-item '>
       <div className="food-item-image-container">
         <img className='food-item-image' src={image} alt="" />
-        {!cartitems[id] ?
-          <img className='add' onClick={() => addtocart(id)} src={assets.add_icon_white} alt='' />
-          : <div className="food-item-counter">
-            <img onClick={() => removefromcart(id)} src={assets.remove_icon_red} alt="" />
-            <p>{cartitems[id]}</p>
-            <img onClick={() => addtocart(id)} src={assets.add_icon_green} alt="" />
-          </div>}
+        
+        
+    {
+      !quantity && ( <img  className='add'    onClick={() => addtocart(id)}      src={assets.add_icon_white} alt=''/>)
+    }
+  
+{
+  quantity>0 && (<div className="food-item-counter">
+        <img onClick={() => removefromcart(id)} src={assets.remove_icon_red} alt="" />
+        <p>{quantity}</p>
+        <img onClick={() => addtocart(id)} src={assets.add_icon_green} alt="" />
+      </div>)
+}
+     
+
       </div>
       <div className="food-item-info">
         <div className="food-item-name-rating">

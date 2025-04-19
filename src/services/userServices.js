@@ -5,7 +5,6 @@ export const userServices={
     async userLogin(data){
        try {
         const response=await userAxiosInstance.post('/login',data);
-        console.log(response,"response in userservice login")
         return response
        } catch (error) {
         console.log(error)
@@ -15,7 +14,6 @@ export const userServices={
     async foodLists(){
         try {
             const response=await userAxiosInstance.get('/food-list')
-            console.log(response)
             return response
         } catch (error) {
             return error
@@ -27,8 +25,35 @@ export const userServices={
             return response
 
         } catch (error) {
-            console.log(error,"error in userservice")
+         
             return error.response
+        }
+    },
+    async addToCart(data){
+       try {
+        const response=await userAxiosInstance.post('/addToCart',data);
+        return response
+        console.log(response)
+       } catch (error) {
+        console.log(error)
+       }
+        
+    },
+    async removeFromCart(data){
+        try {
+            const response=await userAxiosInstance.post('/removeFromCart',data)
+            return response
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async userCart(){
+        try {
+            const response=await userAxiosInstance.get('/userCart')
+            return response
+        } catch (error) {
+            console.log(error)
         }
     }
 }

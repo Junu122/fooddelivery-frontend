@@ -48,6 +48,8 @@ userAxiosInstance.interceptors.response.use(
       // Handle token expiration
       if (error.response.status === 401) {
         // Redirect to login or refresh token
+        localStorage.removeItem("userToken")
+        window.location.href = '/login';
         console.log('Unauthorized - redirecting to login');
         // Add your token refresh logic here
       }

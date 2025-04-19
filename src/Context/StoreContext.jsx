@@ -1,44 +1,168 @@
 import { createContext, useEffect, useState } from "react";
-import axios from "axios"
 export const Storecontext = createContext(null);
 import { userServices } from "../services/userServices";
 const Storecontextprovider = (props) => {
-  const [cartitems, setcartitems] = useState({});
+  const [cartitems, setcartitems] = useState({items:[]});
   const [token,settoken]=useState("")
+ 
 
   
 
 const [food_lists,setfoodlists]=useState([])
- 
+
+//add to cart
   const addtocart = async(itemId) => {
-    if (!cartitems[itemId]) {
-      setcartitems((prev) => ({ ...prev, [itemId]: 1 }));
-    } else {
-      setcartitems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+
+    if(token){
+      
+     setcartitems(prevCart=>{
+      const existingItemIndex=prevCart?.items?.findIndex(item=>item.itemId==itemId)
+      if (existingItemIndex >= 0) {
+      return {
+        ...prevCart,
+        items:prevCart.items.map((item,index)=>{
+          if(item.itemId==itemId && item.quantity<10){
+            return {
+              ...item,
+              quantity:item.quantity+1
+            }
+          }
+          return item
+       
+        })
+      }
+       
+      } else {
+      return {
+        ...prevCart,
+        items:[...prevCart.items, 
+          { itemId:itemId,
+             quantity: 1 }
+        ]
+      }
+       
+      }
+     
+     })
+     
+     const response= await userServices.addToCart({itemId:itemId},token)
+    
+    }else{
+      const cartindex=cartitems.items.findIndex(item=>item.itemId==itemId);
+      console.log(cartindex,"cartindex")
+      if(cartindex=== -1){
+        setcartitems(prev=>({
+          ...prev,
+          items:[...prev.items, 
+            { itemId:itemId,
+               quantity: 1 }
+          ]
+        }))
+      }else{
+        setcartitems(prev=>({
+          ...prev,
+          items:prev.items.map((item,index)=>{
+            if(item.itemId==itemId && item.quantity<10){
+              return {
+                ...item,
+                quantity:item.quantity+1
+              }
+            }
+            return item
+         
+          })
+        }))
+      }
     }
-   
-    // if(token){
-    //  const response= await axios.post("http://localhost:4000/api/cart/add",{itemid:itemId},{headers:{token}})
-    //  console.log(response,"data response")
-    // }
   };
 
 
 
   //remove from cart
-  const removefromcart =async (itemId) => {
-    setcartitems((prev) => ({ ...prev, [itemId]: prev[itemId]- 1 }));
-    // if(token){
-    //   await axios.post("http://localhost:4000/api/cart/remove",{itemid:itemId},{headers:{token}})
-    // }
-    
+  const removefromcart = async (itemId) => {
+    try {
+      if (token) {
+        const response = await userServices.removeFromCart({ itemId: itemId }, token);
+        
+        if (response && response?.data?.success === true) {
+          setcartitems(prev => {
+            // First map to decrease quantities
+            const updatedItems = prev.items.map((item) => {
+              if (item.itemId === itemId && item.quantity > 1) {
+                return {
+                  ...item,
+                  quantity: item.quantity - 1
+                };
+              }
+              if (item.itemId === itemId && item.quantity <= 1) {
+                return {
+                  ...item,
+                  quantity: 0
+                };
+              }
+              return item;
+            });
+            
+            // Then filter out items with quantity 0
+            return {
+              ...prev,
+              items: updatedItems.filter(item => item.quantity > 0)
+            };
+          });
+        }
+      } else {
+        setcartitems(prev => {
+          // First map to decrease quantities
+          const updatedItems = prev.items.map((item) => {
+            if (item.itemId === itemId && item.quantity > 1) {
+              return {
+                ...item,
+                quantity: item.quantity - 1
+              };
+            }
+            if (item.itemId === itemId && item.quantity <= 1) {
+              return {
+                ...item,
+                quantity: 0
+              };
+            }
+            return item;
+          });
+          
+          // Then filter out items with quantity 0
+          return {
+            ...prev,
+            items: updatedItems.filter(item => item.quantity > 0)
+          };
+        });
+      }
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
   };
 
-//fetch food list
 
+  const fetchUserCart = async () => {
+    try {
+      const response = await userServices.userCart();
+     console.log(response)
+      if (response?.data?.success) {
+        setcartitems(response?.data?.usercart );
+        
+      }else{
+        console.log("not getting")
+      }
+    } catch (error) {
+      console.error("Error fetching user cart:", error);
+    }
+  };
+
+  
+
+//fetch food list
 const fetchfoodlist=async()=>{
   try {
-    const response=await userServices.foodLists()
+    const response=await userServices.foodLists();
     if(response?.data?.success){
       setfoodlists(response?.data?.data)
     }
@@ -49,23 +173,8 @@ const fetchfoodlist=async()=>{
 
    
 
-  //total cart amount
- const gettotalcartamount=()=>{
-  let totalamount=0;
-  for(const item in cartitems){
-    if(cartitems[item]>0){
-      let iteminfo=food_lists.find((product)=>product._id==item)
-      totalamount+=iteminfo.price*cartitems[item]
-    }
-    
-  }
-  return totalamount;
- }
 
-//  const loadCartData=async(token)=>{
-//   const response=await axios.post('http://localhost:4000/api/cart/getcart',{},{headers:{token}})
-//   setcartitems(response.data.cartdata)
-//  }
+
 
 
 
@@ -74,24 +183,26 @@ const fetchfoodlist=async()=>{
 
  useEffect(()=>{
   async function loaddata(){
-    await fetchfoodlist()
     const token=localStorage.getItem("userToken")
     if(token){
       settoken(token)
+      await fetchUserCart()
     }
+    await fetchfoodlist()
   }
   loaddata()
+ },[token])
 
- },[])
+
   const contextvalue = {
     food_lists,
     cartitems,
     setcartitems,
     addtocart,
     removefromcart,
-    gettotalcartamount,
     token,
-    settoken
+    settoken,
+   
   };
   return (
     <Storecontext.Provider value={contextvalue}>
