@@ -11,7 +11,7 @@ const  Navbar = ({ setshowlogin }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const { gettotalcartamount,token,settoken ,cartitems, setcartitems } = useContext(Storecontext);
-console.log(cartitems,"cartitems")
+ 
    const logout = () => {
     localStorage.removeItem("userToken");
     setcartitems("")
@@ -87,9 +87,6 @@ console.log(cartitems,"cartitems")
               <img src={assets.basket_icon} alt="Cart" />
             </Link>
           
-            {/* {Object.keys(cartitems).length > 0 && (
-          
-              )} */}
               {
                 cartitems?.items?.length> 0 && (
                   <div className="dot">

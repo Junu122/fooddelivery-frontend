@@ -4,165 +4,196 @@ import { userServices } from "../services/userServices";
 const Storecontextprovider = (props) => {
   const [cartitems, setcartitems] = useState({items:[]});
   const [token,settoken]=useState("")
- 
-
-  
-
 const [food_lists,setfoodlists]=useState([])
 
 //add to cart
-  const addtocart = async(itemId) => {
-
-    if(token){
-      
-     setcartitems(prevCart=>{
-      const existingItemIndex=prevCart?.items?.findIndex(item=>item.itemId==itemId)
-      if (existingItemIndex >= 0) {
-      return {
-        ...prevCart,
-        items:prevCart.items.map((item,index)=>{
-          if(item.itemId==itemId && item.quantity<10){
-            return {
-              ...item,
-              quantity:item.quantity+1
-            }
-          }
-          return item
-       
-        })
-      }
-       
-      } else {
-      return {
-        ...prevCart,
-        items:[...prevCart.items, 
-          { itemId:itemId,
-             quantity: 1 }
-        ]
-      }
-       
-      }
-     
-     })
-     
-     const response= await userServices.addToCart({itemId:itemId},token)
-    
-    }else{
-      const cartindex=cartitems.items.findIndex(item=>item.itemId==itemId);
-      console.log(cartindex,"cartindex")
-      if(cartindex=== -1){
-        setcartitems(prev=>({
-          ...prev,
-          items:[...prev.items, 
-            { itemId:itemId,
-               quantity: 1 }
-          ]
-        }))
-      }else{
-        setcartitems(prev=>({
-          ...prev,
-          items:prev.items.map((item,index)=>{
-            if(item.itemId==itemId && item.quantity<10){
-              return {
-                ...item,
-                quantity:item.quantity+1
-              }
-            }
-            return item
+const addtocart = async(itemId) => {
+  if(token){
+    try {
+      const response = await userServices.addToCart({itemId: itemId}, token);
+      if(response && response.data.success === true){
+        setcartitems(prevCart => {
+          const existingItemIndex = prevCart?.items?.findIndex(item => 
          
-          })
-        }))
+            (typeof item.itemId === 'object' ? item.itemId._id : item.itemId) === itemId
+          );
+          
+          if (existingItemIndex >= 0) {
+            return {
+              ...prevCart,
+              items: prevCart.items.map((item, index) => 
+                index === existingItemIndex && item.quantity < 10
+                  ? { ...item, quantity: item.quantity + 1 }
+                  : item
+              )
+            };
+          } else {
+         
+            return {
+              ...prevCart,
+              items: [...prevCart?.items, { 
+                itemId: itemId,  
+                quantity: 1 
+              }]
+            };
+          }
+        });
       }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
     }
-  };
+  } else {
+    setcartitems(prev => {
+   
+      const currentState = prev || { items: [] };
+      
+      const existingItemIndex = currentState?.items?.findIndex(item => 
+        (typeof item.itemId === 'object' ? item.itemId._id : item.itemId) === itemId
+      );
+      
+      if (existingItemIndex >= 0) {
+        return {
+          ...currentState,
+          items: currentState.items.map((item, index) => 
+            index === existingItemIndex && item.quantity < 10
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        };
+      } else {
+        return {
+          ...currentState,
+          items: [...(currentState?.items || []), { 
+            itemId: itemId,
+            quantity: 1 
+          }]
+        };
+      }
+    });
+  }
+};
 
 
 
   //remove from cart
-  const removefromcart = async (itemId) => {
-    try {
-      if (token) {
-        const response = await userServices.removeFromCart({ itemId: itemId }, token);
-        
-        if (response && response?.data?.success === true) {
-          setcartitems(prev => {
-            // First map to decrease quantities
-            const updatedItems = prev.items.map((item) => {
-              if (item.itemId === itemId && item.quantity > 1) {
-                return {
-                  ...item,
-                  quantity: item.quantity - 1
-                };
-              }
-              if (item.itemId === itemId && item.quantity <= 1) {
-                return {
-                  ...item,
-                  quantity: 0
-                };
-              }
-              return item;
-            });
+  const removefromcart = async(itemId) => {
+    if(token){
+      try {
+        const response = await userServices.removeFromCart({itemId: itemId}, token);
+     
+        if(response && response.data.success === true){
+          const updatedCart = await userServices.userCart(); 
+          if (updatedCart && updatedCart?.data?.success) {
+          
+            setcartitems(updatedCart?.data?.usercart);
+          } else {
             
-            // Then filter out items with quantity 0
+            setcartitems(prevCart => {
+              const existingItemIndex = prevCart?.items?.findIndex(item => 
+                (typeof item.itemId === 'object' ? item.itemId._id : item.itemId) === itemId
+              );
+              
+              if (existingItemIndex >= 0) {
+                const items = prevCart.items;
+                if (items[existingItemIndex].quantity === 1) {
+                
+                  return {
+                    ...prevCart,
+                    items: items.filter((_, index) => index !== existingItemIndex)
+                  };
+                } else {
+             
+                  return {
+                    ...prevCart,
+                    items: items.map((item, index) => 
+                      index === existingItemIndex
+                        ? { ...item, quantity: item.quantity - 1 }
+                        : item
+                    )
+                  };
+                }
+              }
+              return prevCart;
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error removing from cart:", error);
+      }
+    } else {
+     
+      setcartitems(prev => {
+        const existingItemIndex = prev?.items?.findIndex(item => 
+          (typeof item.itemId === 'object' ? item.itemId._id : item.itemId) === itemId
+        );
+        
+        if (existingItemIndex >= 0) {
+          const items = prev.items;
+          if (items[existingItemIndex].quantity === 1) {
+         
             return {
               ...prev,
-              items: updatedItems.filter(item => item.quantity > 0)
+              items: items.filter((_, index) => index !== existingItemIndex)
             };
-          });
+          } else {
+         
+            return {
+              ...prev,
+              items: items.map((item, index) => 
+                index === existingItemIndex
+                  ? { ...item, quantity: item.quantity - 1 }
+                  : item
+              )
+            };
+          }
         }
-      } else {
-        setcartitems(prev => {
-          // First map to decrease quantities
-          const updatedItems = prev.items.map((item) => {
-            if (item.itemId === itemId && item.quantity > 1) {
-              return {
-                ...item,
-                quantity: item.quantity - 1
-              };
-            }
-            if (item.itemId === itemId && item.quantity <= 1) {
-              return {
-                ...item,
-                quantity: 0
-              };
-            }
-            return item;
-          });
-          
-          // Then filter out items with quantity 0
-          return {
-            ...prev,
-            items: updatedItems.filter(item => item.quantity > 0)
-          };
-        });
-      }
-    } catch (error) {
-      console.error('Error removing from cart:', error);
-    }
-  };
-
-
-  const fetchUserCart = async () => {
-    try {
-      const response = await userServices.userCart();
-     console.log(response)
-      if (response?.data?.success) {
-        setcartitems(response?.data?.usercart );
-        
-      }else{
-        console.log("not getting")
-      }
-    } catch (error) {
-      console.error("Error fetching user cart:", error);
+        return prev;
+      });
     }
   };
 
   
+
+  const deleteCartItem = async (itemId) => {
+    setcartitems(prev => {
+      return {
+        ...prev,
+        items: prev?.items?.filter(item =>
+          (typeof item.itemId === 'object' ? item.itemId._id : item.itemId) !== itemId)
+      };
+    });
+
+    if (token) {
+      try {
+        const response = await userServices.removeFromCart({ itemId }, token);
+        
+        if (!response?.data?.success) {
+       
+          const updatedCart = await userServices.userCart();
+          if (updatedCart?.data?.success) {
+            setcartitems(updatedCart.data.usercart);
+          }
+        }
+      } catch (error) {
+        console.error("Error deleting from cart:", error);
+      
+        try {
+          const updatedCart = await userServices.userCart();
+          if (updatedCart?.data?.success) {
+            setcartitems(updatedCart.data.usercart);
+          }
+        } catch (fetchError) {
+          console.error("Error fetching cart after failed delete:", fetchError);
+        }
+      }
+    }
+  };
 
 //fetch food list
 const fetchfoodlist=async()=>{
   try {
     const response=await userServices.foodLists();
+   
     if(response?.data?.success){
       setfoodlists(response?.data?.data)
     }
@@ -171,12 +202,35 @@ const fetchfoodlist=async()=>{
   }
 }
 
-   
+//load cart
+const loadCart = async () => {
+  if (token) {
+    try {
+      const response = await userServices.userCart();
+      if (response && response.data.success) {
+        setcartitems(response.data.usercart);
+      }
+    } catch (error) {
+      console.error("Error loading cart:", error);
+    }
+  }
+};
 
+useEffect(()=>{
+  fetchfoodlist()
+  loadCart()
+},[token])
 
-
-
-
+const getcarttotal=()=>{
+  let carttotal=0;
+  cartitems?.items?.map((item)=>{
+  const cart= typeof item.itemId === 'object'
+    ? item.itemId
+    : food_lists?.find(food => food._id === item.itemId)
+    carttotal+=item.quantity*(cart.price*10)
+  })
+  return carttotal
+}
 
 
 
@@ -186,7 +240,7 @@ const fetchfoodlist=async()=>{
     const token=localStorage.getItem("userToken")
     if(token){
       settoken(token)
-      await fetchUserCart()
+     
     }
     await fetchfoodlist()
   }
@@ -202,6 +256,8 @@ const fetchfoodlist=async()=>{
     removefromcart,
     token,
     settoken,
+    deleteCartItem,
+    getcarttotal
    
   };
   return (
