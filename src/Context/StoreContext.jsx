@@ -1,11 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 export const Storecontext = createContext(null);
 import { userServices } from "../services/userServices";
+import Loading from "../utils/Loading/Loading";
 const Storecontextprovider = (props) => {
   const [cartitems, setcartitems] = useState({items:[]});
   const [token,settoken]=useState("")
 const [food_lists,setfoodlists]=useState([])
-
+const [Load,setLoad]=useState(false)
 //add to cart
 const addtocart = async(itemId) => {
   if(token){
@@ -236,18 +237,24 @@ const getcarttotal=()=>{
 
 
  useEffect(()=>{
-  async function loaddata(){
-    const token=localStorage.getItem("userToken")
-    if(token){
-      settoken(token)
-     
+  setTimeout(() => {
+    async function loaddata(){
+      const token=localStorage.getItem("userToken")
+      if(token){
+        settoken(token)
+       
+      }
+      await fetchfoodlist()
     }
-    await fetchfoodlist()
-  }
-  loaddata()
+    setLoad(true)
+    loaddata()
+  }, 1000);
+ 
  },[token])
 
-
+if(!Load){
+  return <Loading />
+}
   const contextvalue = {
     food_lists,
     cartitems,
@@ -257,7 +264,8 @@ const getcarttotal=()=>{
     token,
     settoken,
     deleteCartItem,
-    getcarttotal
+    getcarttotal,
+    Load
    
   };
   return (

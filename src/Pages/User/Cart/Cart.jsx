@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import "./cart.css";
 import { Storecontext } from "../../../Context/StoreContext";
-import { useNavigate } from "react-router-dom";
-import { food_images } from "../../../assets/assets";
+import { useNavigate ,useLocation} from "react-router-dom";
 
 function Cart() {
-  const { cartitems, food_lists, deleteCartItem,getcarttotal } = useContext(Storecontext);     
-  const navigate = useNavigate(); 
- 
+  const { cartitems, food_lists, deleteCartItem, getcarttotal,token } = useContext(Storecontext);
+  const navigate = useNavigate();
+  const location=useLocation()
+
   return (
     <div className="cart">
-      {cartitems.items.length > 0 ? ( 
+      {cartitems.items.length > 0 ? (
         <>
           <div className="cart-items">
             <div className="cart-items-title">
@@ -24,27 +24,28 @@ function Cart() {
             <br />
             <hr />
 
-            {cartitems?.items?.length > 0 && 
+            {cartitems?.items?.length > 0 &&
               cartitems.items.map((cartitem, index) => {
                 const itemDetails = typeof cartitem.itemId === 'object'
                   ? cartitem.itemId
                   : food_lists?.find(food => food._id === cartitem.itemId);
-                
+
+                // Mobile view will show data labels
                 return (
                   <div key={index}>
-                    <div className="cart-items-item cart-items-title">
-                      <p>{itemDetails?.name}</p>
-                      <p>{itemDetails.category}</p>
-                      <p>&#8377;{itemDetails?.price * 10}</p>
-                      <p>{cartitem?.quantity}</p>
-                      <p>&#8377;{cartitem?.quantity * itemDetails.price * 10}</p>
+                    <div className="cart-items-item">
+                      <p data-label="Item:">{itemDetails?.name}</p>
+                      <p data-label="Category:">{itemDetails.category}</p>
+                      <p data-label="Price:">&#8377;{itemDetails?.price * 10}</p>
+                      <p data-label="Quantity:">{cartitem?.quantity}</p>
+                      <p data-label="Total:">&#8377;{cartitem?.quantity * itemDetails.price * 10}</p>
                       <p
                         className="cross"
                         onClick={() => {
                           deleteCartItem(itemDetails._id);
                         }}
                       >
-                        x
+                        ×
                       </p>
                     </div>
                     <hr />
@@ -53,7 +54,7 @@ function Cart() {
               })
             }
           </div>
-          
+
           <div className="cart-bottom">
             <div className="cart-total">
               <h2>Cart total</h2>
@@ -64,22 +65,25 @@ function Cart() {
                 </div>
                 <hr />
                 <div className="cart-total-details">
-                  <p>Delivery-fee</p>
+                  <p>Delivery fee</p>
                   <p>&#8377;{2 * 10}</p>
                 </div>
                 <div className="cart-total-details">
-                  <p>Convenient-fee</p>
-                  <p>&#8377;{ 10}</p>
+                  <p>Convenience fee</p>
+                  <p>&#8377;{10}</p>
                 </div>
                 <hr />
                 <div className="cart-total-details">
                   <b>Sub-total</b>
-                  <b>&#8377;{getcarttotal()+20+10}</b>
+                  <b>&#8377;{getcarttotal() + 20 + 10}</b>
                 </div>
               </div>
               <button
                 onClick={() => {
-                  navigate("/placeorder"); 
+                
+                    navigate("/PlaceOrder");
+                 
+                  
                 }}
               >
                 Proceed to checkout
@@ -97,7 +101,7 @@ function Cart() {
           </div>
         </>
       ) : (
-        <div className="no-items-container empty-cart-border"> {/* Fixed: class to className */}
+        <div className="no-items-container empty-cart-border">
           <div className="cart-empty-icon">🛒</div>
           <h1>No items in cart</h1>
           <p className="empty-cart-message">Your cart is currently empty. Browse our tasty food to find something you'd like to eat.</p>

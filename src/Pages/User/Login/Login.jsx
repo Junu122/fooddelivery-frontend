@@ -1,13 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../../../assets/assets";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { Storecontext } from "../../../Context/StoreContext";
 import { userServices } from "../../../services/userServices";
+
 import "./Login.css";
 
 
 function Login() {
+  const location = useLocation();
   const navigate=useNavigate()
   const {token,settoken}=useContext(Storecontext)
   const [data, setdata] = useState({});
@@ -62,12 +64,14 @@ function Login() {
     
     try {
       const response = await userServices.userLogin(data);
+      const from = location.state?.from || "/";
+      
       console.log(response);
       if (response?.data?.success) {
         settoken(response?.data?.token)
         localStorage.setItem("userToken",response?.data?.token)
         toast.success("login success")
-        navigate("/")
+        navigate(from);
         console.log("login success");
       } else {
         const newErrorMessages = {

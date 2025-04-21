@@ -6,6 +6,9 @@ import Footer from '../components/user/Footer/Footer';
 import Login from '../Pages/User/Login/Login';
 import Register from '../Pages/User/Register/Register';
 import Cart from '../Pages/User/Cart/Cart';
+import PlaceOrder from '../Pages/User/PlaceOrder/PlaceOrder';
+import Loading from '../utils/Loading/Loading';
+import ProtectedRoute from './ProtectedRoute';
 const UserRouter = () => {
   const [showLogin,setshowlogin]=useState(false)
   
@@ -19,6 +22,12 @@ const UserRouter = () => {
         <Route path='/register' element={<Register />}     />      
         <Route path='/' element={<Home />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path='/PlaceOrder' element={
+          <ProtectedRoute>
+          <PlaceOrder />
+          </ProtectedRoute>
+          } />
+       
       </Routes>
      <Footer />
     </div>
