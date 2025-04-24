@@ -7,38 +7,18 @@ const Storecontextprovider = (props) => {
   const [token,settoken]=useState("")
 const [food_lists,setfoodlists]=useState([])
 const [Load,setLoad]=useState(false)
-//add to cart
+const [TodaySpecial,setTodaySpecial]=useState([])
+const [menu, setmenu] = useState("home");
+
 const addtocart = async(itemId) => {
   if(token){
     try {
       const response = await userServices.addToCart({itemId: itemId}, token);
       if(response && response.data.success === true){
-        setcartitems(prevCart => {
-          const existingItemIndex = prevCart?.items?.findIndex(item => 
-         
-            (typeof item.itemId === 'object' ? item.itemId._id : item.itemId) === itemId
-          );
-          
-          if (existingItemIndex >= 0) {
-            return {
-              ...prevCart,
-              items: prevCart.items.map((item, index) => 
-                index === existingItemIndex && item.quantity < 10
-                  ? { ...item, quantity: item.quantity + 1 }
-                  : item
-              )
-            };
-          } else {
-         
-            return {
-              ...prevCart,
-              items: [...prevCart?.items, { 
-                itemId: itemId,  
-                quantity: 1 
-              }]
-            };
-          }
-        });
+         const updatedCart= await userServices.userCart(); 
+         console.log(updatedCart,"updated cart")
+         setcartitems(updatedCart?.data?.usercart)
+       
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -197,6 +177,7 @@ const fetchfoodlist=async()=>{
    
     if(response?.data?.success){
       setfoodlists(response?.data?.data)
+      setTodaySpecial(response?.data?.todayspecial)
     }
   } catch (error) {
     
@@ -265,7 +246,10 @@ if(!Load){
     settoken,
     deleteCartItem,
     getcarttotal,
-    Load
+    Load,
+    TodaySpecial,
+    menu, 
+    setmenu
    
   };
   return (

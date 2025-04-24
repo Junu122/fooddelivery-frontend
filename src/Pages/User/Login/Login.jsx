@@ -18,12 +18,12 @@ function Login() {
     password: ""
   });
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.body.style.overflow = "hidden";
+  //   return () => {
+  //     document.body.style.overflow = "auto";
+  //   };
+  // }, []);
 
   const handlechange = (e) => {
     seterrorMessage({})
@@ -51,13 +51,13 @@ function Login() {
     
     const errors = validateData(data);
     if (errors.email || errors.password) {
-      // Set error message and then log it - but don't try to log it immediately
+    
       seterrorMessage({
         email: errors.email || "",
         password: errors.password || ""
       });
       
-      // Log the errors directly instead of using state
+      
       console.log("Validation errors:", errors);
       return;
     }
@@ -79,7 +79,7 @@ function Login() {
           password: response?.data?.passwordMessage || ""
         };
         
-        // Set state and also log directly
+        
         seterrorMessage(newErrorMessages);
         console.log("Server response errors:", newErrorMessages);
       }

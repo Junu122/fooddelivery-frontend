@@ -9,6 +9,11 @@ import Cart from '../Pages/User/Cart/Cart';
 import PlaceOrder from '../Pages/User/PlaceOrder/PlaceOrder';
 import Loading from '../utils/Loading/Loading';
 import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
+import Menu from '../Pages/User/Menu/Menu';
+import About from '../Pages/User/About/About';
+import Myorders from '../Pages/User/Myorders/Myorders';
+
 const UserRouter = () => {
   const [showLogin,setshowlogin]=useState(false)
   
@@ -18,7 +23,13 @@ const UserRouter = () => {
     <div className='app'>
     <Navbar setshowlogin={setshowlogin} />
       <Routes>
-        <Route path='/login' element={ <Login setshowlogin={setshowlogin} />}/>
+      <Route path='/menu' element={<Menu />} />
+        <Route path='/login' element={
+           <PublicRoute>
+           <Login setshowlogin={setshowlogin} />
+           </PublicRoute>
+         
+           }/>
         <Route path='/register' element={<Register />}     />      
         <Route path='/' element={<Home />} />
         <Route path='/cart' element={<Cart />} />
@@ -27,7 +38,9 @@ const UserRouter = () => {
           <PlaceOrder />
           </ProtectedRoute>
           } />
-       
+       <Route path='/menu' element={<Menu />} />
+       <Route path='/about' element={<About />} />
+       <Route path='/my-orders' element={<Myorders />} />
       </Routes>
      <Footer />
     </div>

@@ -80,18 +80,27 @@ export const assets = {
     logout_icon,
     bag_icon,
     parcel_icon,
-    food_1
+    food_1,
+    food_16,
+    food_29,
+    food_26
 }
 
 export const menu_list = [
     {
-        menu_name: "Salad",
-        menu_image: menu_1
+        menu_name:"all",
+       menu_image:menu_7
     },
     {
         menu_name: "Rolls",
         menu_image: menu_2
     },
+    
+    {
+        menu_name: "Salad",
+        menu_image: menu_1
+    },
+   
     {
         menu_name: "Deserts",
         menu_image: menu_3

@@ -6,11 +6,11 @@ import { Storecontext } from "../../../Context/StoreContext";
 
 const  Navbar = ({ setshowlogin }) => {
   const navigate=useNavigate()
-  const [menu, setmenu] = useState("home");
+  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
-  const { gettotalcartamount,token,settoken ,cartitems, setcartitems } = useContext(Storecontext);
+  const { gettotalcartamount,token,settoken ,cartitems, setcartitems,menu, setmenu } = useContext(Storecontext);
  
    const logout = () => {
     localStorage.removeItem("userToken");
@@ -19,13 +19,12 @@ const  Navbar = ({ setshowlogin }) => {
     navigate("/")
   };
 
-  // Close mobile menu when clicking on a link
+ 
   const handleMenuClick = (menuItem) => {
     setmenu(menuItem);
     setMobileMenuOpen(false);
   };
 
-  // Handle scroll events for sticky navbar
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -51,39 +50,34 @@ const  Navbar = ({ setshowlogin }) => {
         <ul className="navbar-menu">
           <a
             
-            href="#header"
+            href="/"
             onClick={() => setmenu("home")}
             className={menu === "home" ? "active" : ""}
           >
             Home
           </a>
-          <a
-            href="#explore-menu"
+          <Link to={'/menu'}
+           
             onClick={() => setmenu("menu")}
             className={menu === "menu" ? "active" : ""}
           >
             Menu
-          </a>
-          <a
-            href="#app-download"
-            onClick={() => setmenu("mobileapps")}
-            className={menu === "mobileapps" ? "active" : ""}
-          >
-            Mobile-Apps
-          </a>
-          <a
-            href="#footer"
+          </Link>
+          
+          <Link
+            to={'/about'}
             onClick={() => setmenu("contactus")}
             className={menu === "contactus" ? "active" : ""}
           >
-            Contact-Us
-          </a>
+            About-Us
+          </Link>
         </ul>
         
         <div className="navbar-right">
           
           <div className="navbar-basket-icon">
-            <Link to={"/cart"}>
+            <Link to={"/cart"}
+               onClick={()=>setmenu("")}>
               <img src={assets.basket_icon} alt="Cart" />
             </Link>
           
@@ -105,7 +99,7 @@ const  Navbar = ({ setshowlogin }) => {
               <ul className="nav-profile-dropdown">
                 <li>
                   <img src={assets.bag_icon} alt="Orders" />
-                  <Link to={"/myorders"}>
+                  <Link onClick={()=>setmenu('')} to={"/my-orders"}>
                     <p>Orders</p>
                   </Link>
                 </li>
@@ -141,27 +135,21 @@ const  Navbar = ({ setshowlogin }) => {
         >
           Home
         </Link>
-        <a
-          href="#explore-menu"
+        <Link
+          to={'/menu'}
           onClick={() => handleMenuClick("menu")}
           className={menu === "menu" ? "active" : ""}
         >
           Menu
-        </a>
-        <a
-          href="#app-download"
-          onClick={() => handleMenuClick("mobileapps")}
-          className={menu === "mobileapps" ? "active" : ""}
-        >
-          Mobile-Apps
-        </a>
-        <a
-          href="#footer"
+        </Link>
+   
+        <Link
+          to={'/about'}
           onClick={() => handleMenuClick("contactus")}
           className={menu === "contactus" ? "active" : ""}
         >
-          Contact-Us
-        </a>
+          About-us
+        </Link>
       
        
         
@@ -169,14 +157,14 @@ const  Navbar = ({ setshowlogin }) => {
           <>
             <hr />
             <Link
-              to={"/myorders"}
+              to={"/my-orders"}
               onClick={() => handleMenuClick("")}
             >
               My Orders
             </Link>
             <a href="#" onClick={logout}>Logout</a>
           </>
-        ): <button onClick={() => setshowlogin(true)}>Sign-In</button>}
+        ): <button onClick={() =>{setshowlogin(true),navigate('/login'),setMobileMenuOpen(false)} }>Sign-In</button>}
       </div>
       
       {/* Overlay for mobile menu */}

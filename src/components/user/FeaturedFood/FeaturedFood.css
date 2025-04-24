@@ -1,0 +1,115 @@
+.menu-section {
+    padding: 60px 0;
+    text-align: center;
+    background-color: var(--light-gray);
+    border-radius: 20px;
+    margin: 40px 0;
+  }
+  
+  .menu-section h2 {
+    margin-bottom: 40px;
+    font-size: 2rem;
+    color: var(--dark-gray);
+  }
+  
+  .menu-item {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  
+  .menu-card {
+    background-color: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    width: 300px;
+  }
+  
+  .menu-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+  .food-img{
+    position: relative;
+  }
+  .food-img img {
+    width: 100%;
+    
+    object-fit: cover;
+  }
+  
+  
+  .food-info {
+    padding: 20px;
+    text-align: left;
+  }
+  
+  .food-info h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--dark-gray);
+  }
+  
+  .food-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    height: 40px;
+  }
+  
+  .food-price-cart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+  
+  .add-to-cart {
+    padding: 8px 15px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+ 
+  .add{
+    width: 35px;
+
+    bottom: 15px;
+    right: 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    border:1px solid #e63c14;
+    
+}
+  .add-to-cart:hover {
+    cursor:pointer;
+    border: none;
+    background-color: #e63c14;
+  }
+  
+  .view-all-btn {
+    padding: 10px 25px;
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    border-radius: 50px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .view-all-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+  }

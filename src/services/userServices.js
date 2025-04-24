@@ -55,5 +55,29 @@ export const userServices={
         } catch (error) {
             console.log(error)
         }
+    },
+    async createOrder(data){
+        try {
+            const response=await userAxiosInstance.post('/create-order',data)
+            return response
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async verifyPayment(paymentData,orderdetails,Data){
+        try {
+            const responsedata=await userAxiosInstance.post('/verify-payment',{paymentData,orderdetails,Data})
+            return responsedata
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async myOrders(){
+        try {
+            const response=await userAxiosInstance.get('/my-orders')
+            return response
+        } catch (error) {
+            console.log(error)
+        }
     }
 }

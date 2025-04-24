@@ -10,7 +10,7 @@ function Cart() {
 
   return (
     <div className="cart">
-      {cartitems.items.length > 0 ? (
+      {cartitems?.items?.length > 0 ? (
         <>
           <div className="cart-items">
             <div className="cart-items-title">

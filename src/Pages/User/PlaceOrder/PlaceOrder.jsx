@@ -4,10 +4,12 @@ import "./placeorder.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../utils/Loading/Loading";
+import { userServices } from "../../../services/userServices";
 function PlaceOrder() {
-    const {getcarttotal, token, food_lists, cartitems,Load } =
+  const navigate = useNavigate();
+    const {getcarttotal, token, food_lists, cartitems,Load,setcartitems } =
     useContext(Storecontext);
-  const [data, setdata] = useState({
+  const [Data, setData] = useState({
     firstname: "",
     lastname: "",
     city: "",
@@ -21,38 +23,90 @@ function PlaceOrder() {
   const onchangehandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setdata((prev) => ({ ...prev, [name]: value }));
+    setData((prev) => ({ ...prev, [name]: value }));
   };
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
 
   const placeorder = async (e) => {
-    e.preventDefault();
-    // let orderitems = [];
-    // food_lists.map((item) => {
-    //   if (cartitems[item._id] > 0) {
-    //     let iteminfo = item;
-    //     iteminfo["quantity"] = cartitems[item._id];
-    //     orderitems.push(iteminfo);
-    //   }
-    // });
-    // let orderdata = {
-    //   address: data,
-    //   items: orderitems,
-    //   amount: gettotalcartamount() + 2,
-    // };
-    // let response = await axios.post(
-    //   "http://localhost:4000/api/order/placeorder",
-    //   orderdata,
-    //   { headers: { token } }
-    // );
-    // console.log(response, "responseeeeeeeeeeeeeeeeee");
-    // if (response.data.success) {
-    //   const { session_url } = response.data;
-    //   window.location.replace(session_url.url);
-    // }
-  };
-  const navigate = useNavigate();
+    e.preventDefault()
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+    
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?');
+      return;
+    }
+     const data={
+      amount:getcarttotal()+30,
+      currency:"INR",
+      receipt:'receipt_order_' + Date.now(),
+      notes:cartitems
+     }
+    const response=await userServices.createOrder(data);
+    console.log(response,"response in creating cart")
+    if(response?.data?.succes){
 
-  
+      
+     
+      const options = {
+        key: 'rzp_test_dFrlarHft7rxIN', 
+        amount: response.data.order.amount,
+        currency: response.data.order.currency,
+        name: 'Tomato',
+        description: 'Food Order Payment',
+        order_id: response.data.order.id,
+        handler: function(responsedata) {
+         console.log(responsedata)
+         verifyPayment(responsedata,response.data.order,Data)
+        },
+        prefill: {
+          name: Data.firstname + ' ' + Data.lastname,
+          email: Data.email,
+          contact: data.phone
+        },
+       
+        theme: {
+          color: '#3399cc'
+        }
+      };
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    }else{
+      console.log("error occured")
+    }
+   
+
+  };
+
+  const verifyPayment=async (paymentData,orderdetails,Data)=>{
+    try {
+      console.log(orderdetails)
+      const isverify=await userServices.verifyPayment(paymentData,orderdetails,Data)
+      console.log(isverify,"is verified.............")
+      if(isverify?.data?.success){
+        setcartitems([])
+        console.log(isverify,"isverify")
+        navigate(`/payment/${isverify?.data?.orderdata._id}`)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
+
+ 
   return (
     <form className="palce-order" onSubmit={placeorder}>
       <div className="place-order-left">

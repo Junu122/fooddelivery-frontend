@@ -1,7 +1,7 @@
-.header{
+.header-1{
     height: 34vw;
     margin: 30px auto;
-    background: url('https://www.abhibus.com/blog/wp-content/uploads/2023/07/Top-10-Must-Try-Foods-on-Your-Next-Kerala-Trip.jpg') no-repeat;
+    background: url("https://www.cnet.com/a/img/resize/69256d2623afcbaa911f08edc45fb2d3f6a8e172/hub/2023/02/03/afedd3ee-671d-4189-bf39-4f312248fb27/gettyimages-1042132904.jpg?auto=webp&fit=crop&height=675&width=1200") no-repeat;
     background-size: cover;
     position: relative;
 }
@@ -20,7 +20,7 @@
 
 .header-contents h2{
     font-weight: 500;
-    color: #fff;
+    color: #fffffff8;
     font-size: max(4.5vw,22px);
 }
 
@@ -59,8 +59,8 @@
 }
 
 @media(max-width:480px){
-    .header{
-        height:77vw;
+    .header-1{
+        height:74vw;
        margin: 0 ;
        padding: 0;
     }
@@ -73,7 +73,7 @@
     }
     .header-contents h2{
     
-     font-size: 20px;
+     font-size: 40px;
     }
 }
 

@@ -10,12 +10,35 @@
 
 .food-display-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill,  minmax(350px, 4fr));
     gap: 30px;
     row-gap: 50px;
     margin-top: 30px;
     overflow: hidden;
 }
+
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .no-results h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .no-results p {
+    color: #777;
+    font-size: 1.1rem;
+  }
+ 
+.loader {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #666;
+  }
 
 @media(max-width:480px){
     .food-display h1{

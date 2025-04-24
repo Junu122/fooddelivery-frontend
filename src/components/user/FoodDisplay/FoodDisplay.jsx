@@ -1,37 +1,123 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import "./fooddisplay.css"
 import { Storecontext } from '../../../Context/StoreContext'
 import FoodList from '../FoodList/FoodList'
 import { food_images } from '../../../assets/assets'
-function FoodDisplay({category}) {
- 
- const {food_lists  } = useContext(Storecontext);
 
-const foodwithimage=food_lists.map((food,index)=>{
- 
-  const matchingimage=food_images.find(food_image=>food_image.name==food.name)
+function FoodDisplay({category, searchQuery}) {
+  const { food_lists } = useContext(Storecontext);
   
-  return{
-    ...food,
-    image:matchingimage?matchingimage.image:"none"
-  }
-})
+
+  const [filteredItems, setFilteredItems] = useState([])
+  const [menuItems, setMenuItems] = useState([])
+  const [visibleItems, setVisibleItems] = useState([])
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const loaderRef = useRef(null)
+  const ITEMS_PER_PAGE = 8 
+
+
+  // const foodWithImage = food_lists?.map((food) => {
+  //   const matchingImage = food_images.find(food_image => food_image.name === food.name)
+  //   return {
+  //     ...food,
+  //     image: matchingImage ? matchingImage.image : "none"
+  //   }
+  // })
+
+  
+  useEffect(() => {
+    setFilteredItems(food_lists)
+    setMenuItems(food_lists)
+  }, [food_lists])
+
+ 
+  useEffect(() => {
+    let results = menuItems;
+    
+  
+    if (category !== 'all') {
+      results = results.filter(item => item.category === category);
+    }
+    
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      results = results.filter(item => 
+        item.name.toLowerCase().includes(query) || 
+        item.description.toLowerCase().includes(query)
+      );
+    }
+    
+    setFilteredItems(results);
+    setPage(1); 
+  }, [searchQuery, category, menuItems]);
+
+
+  useEffect(() => {
+    const itemsToShow = filteredItems.slice(0, page * ITEMS_PER_PAGE);
+    setVisibleItems(itemsToShow);
+    setLoading(false);
+  }, [filteredItems, page]);
+
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && !loading && visibleItems.length < filteredItems.length) {
+          setLoading(true);
+        
+          setTimeout(() => {
+            setPage(prevPage => prevPage + 1);
+          }, 300);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+    
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [visibleItems, filteredItems, loading]);
 
   return (
     <div className='food-display' id='food-display'>
-    <h1>Top dishes near you</h1>
-    <div className="food-display-list">
-        {foodwithimage?.map((list,index)=>{
-          if(category==="all" ||   category === list.category){
-          
-            return (
-                <FoodList key={index} id={list._id} price={list.price} name={list.name}  description={list.description} category={list.category} image={list.image}/>
-            )
-          }
-            
-        })}
-    </div>
-      
+      <h1>Top dishes for you ({filteredItems.length})</h1>
+      <div>
+        {filteredItems.length === 0 ? (
+          <div className="no-results">
+            <h2>No items found</h2>
+            <p>Try adjusting your search or filters</p>
+          </div>
+        ) : (
+          <>
+            <div className="food-display-list">
+              {visibleItems.map((item, index) => (
+                <FoodList 
+                  key={index} 
+                  id={item._id} 
+                  price={item.price} 
+                  name={item.name} 
+                  description={item.description} 
+                  category={item.category} 
+                  image={item.image}
+                />
+              ))}
+            </div>
+            {visibleItems.length < filteredItems.length && (
+              <div ref={loaderRef} className="loader">
+                {loading ? 'Loading more items...' : 'Scroll for more'}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
 }
