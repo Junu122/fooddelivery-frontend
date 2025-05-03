@@ -17,14 +17,6 @@ function FoodDisplay({category, searchQuery}) {
   const ITEMS_PER_PAGE = 8 
 
 
-  // const foodWithImage = food_lists?.map((food) => {
-  //   const matchingImage = food_images.find(food_image => food_image.name === food.name)
-  //   return {
-  //     ...food,
-  //     image: matchingImage ? matchingImage.image : "none"
-  //   }
-  // })
-
   
   useEffect(() => {
     setFilteredItems(food_lists)

@@ -1,4 +1,4 @@
-import userAxiosInstance from "../utils/axios";
+import {userAxiosInstance} from "../utils/axios";
 
 
 export const userServices={
@@ -53,7 +53,7 @@ export const userServices={
             const response=await userAxiosInstance.get('/userCart')
             return response
         } catch (error) {
-            console.log(error)
+           
         }
     },
     async createOrder(data){

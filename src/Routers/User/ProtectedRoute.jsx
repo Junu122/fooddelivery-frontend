@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { Storecontext } from "../Context/StoreContext";
+import { Storecontext } from "../../Context/StoreContext";
 
 function ProtectedRoute({ children }) {
-  const { token } = useContext(Storecontext);
+ const {settoken}=useContext(Storecontext)
+  const  token  = localStorage.getItem('userToken')
   const location = useLocation();
 
   if (!token) {
-    // Redirect to login while saving the current location
+    settoken("")
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 

@@ -1,0 +1,23 @@
+.table-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  /* You can add this class to your image */
+  .table-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+  }
+  
+  /* Adjust table cell to have consistent dimensions */
+  .image-cell {
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    vertical-align: middle;
+  }

@@ -10,9 +10,10 @@
 
 .food-display-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill,  minmax(350px, 4fr));
-    gap: 30px;
-    row-gap: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 4fr));
+    gap: 15px;
+    
+    
     margin-top: 30px;
     overflow: hidden;
 }

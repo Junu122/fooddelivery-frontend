@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import Navbar from './components/user/Navbar/Navbar'
-import { Route, Routes } from "react-router-dom";
-import './App.css'
-import UserRouter from './Routers/UserRouter';
 
+import { Route, Routes } from "react-router-dom";
+import UserRouter from './Routers/User/UserRouter';
+import AdminRouter from './Routers/Admin/AdminRouter';
 function App() {
  
 
@@ -12,6 +11,7 @@ function App() {
    
      <Routes>
       <Route path='/*' element={<UserRouter />} />
+      <Route path='/admin/*' element={<AdminRouter />} />
      </Routes>
 
     </>

@@ -2,13 +2,23 @@ import { createContext, useEffect, useState } from "react";
 export const Storecontext = createContext(null);
 import { userServices } from "../services/userServices";
 import Loading from "../utils/Loading/Loading";
+import { adminService } from "../services/adminServices";
 const Storecontextprovider = (props) => {
+  //user side
   const [cartitems, setcartitems] = useState({items:[]});
   const [token,settoken]=useState("")
 const [food_lists,setfoodlists]=useState([])
 const [Load,setLoad]=useState(false)
 const [TodaySpecial,setTodaySpecial]=useState([])
 const [menu, setmenu] = useState("home");
+
+//admin side
+const [Users,setUsers]=useState([]);
+const [FoodLists,setFoodLists]=useState([])
+const [Orders,setOrders]=useState([])
+const [adminToken,setadminToken]=useState("")
+
+
 
 const addtocart = async(itemId) => {
   if(token){
@@ -198,10 +208,7 @@ const loadCart = async () => {
   }
 };
 
-useEffect(()=>{
-  fetchfoodlist()
-  loadCart()
-},[token])
+
 
 const getcarttotal=()=>{
   let carttotal=0;
@@ -213,6 +220,34 @@ const getcarttotal=()=>{
   })
   return carttotal
 }
+
+
+//admin side controls
+const dashboardDatas=async()=>{
+  if(adminToken){
+    try {
+      const response=await adminService.userdata()
+      if(response?.data?.allUsers){
+        setUsers(response?.data?.allUsers)
+      }
+     const fooddata=await adminService.fooddata();
+     if(fooddata?.data?.allFoods){
+      setFoodLists(fooddata?.data?.allFoods)
+    }
+     
+      const orderdata=await adminService.orderdata()
+    if(orderdata?.data?.success){
+      setOrders(orderdata?.data?.allOrders)
+    }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
+}
+
+
+
 
 
 
@@ -233,6 +268,33 @@ const getcarttotal=()=>{
  
  },[token])
 
+ useEffect(()=>{
+  fetchfoodlist()
+  loadCart()
+},[token])
+
+
+
+useEffect(()=>{
+  setTimeout(() => {
+    async function loadadmin(){
+      const tokenadmin=localStorage.getItem('adminToken');
+      if(tokenadmin){
+        setadminToken(tokenadmin)
+        
+      }
+    }
+    loadadmin()
+  }, 1000);
+},[adminToken])
+
+useEffect(() => {
+  dashboardDatas()
+ 
+}, [adminToken]);
+
+
+
 if(!Load){
   return <Loading />
 }
@@ -249,7 +311,14 @@ if(!Load){
     Load,
     TodaySpecial,
     menu, 
-    setmenu
+    setmenu,
+
+
+    Users,
+    FoodLists,
+    Orders,
+    setOrders,
+    setadminToken
    
   };
   return (

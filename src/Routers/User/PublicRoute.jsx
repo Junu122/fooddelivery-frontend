@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
-import { Storecontext } from "../Context/StoreContext";
+import { Storecontext } from "../../Context/StoreContext";
 
 
 
