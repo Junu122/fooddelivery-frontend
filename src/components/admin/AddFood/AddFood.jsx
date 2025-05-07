@@ -3,7 +3,7 @@ import './AddFood.css'
 
 const AddFood = ({ setActiveTab }) => {
   const handleAddUser = (e) => {
-    e.preventDefault(); // prevent form reload
+    e.preventDefault(); 
     console.log("hello")
   }
 

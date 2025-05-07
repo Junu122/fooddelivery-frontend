@@ -45,6 +45,22 @@ export const adminService={
       } catch (error) {
         console.log(error)
       }
+    },
+    async updateFood(fooddetails,foodid){
+      try {
+        const response=await adminAxiosInstance.post('/updatefood',{fooddetails,foodid})
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async updatefodStatus(foodid,foodstatus){
+      try {
+        const response=await adminAxiosInstance.post('/update-foodstatus',{foodid,foodstatus})
+        return response
+      } catch (error) {
+        console.log(error)
+      }
     }
 
 }

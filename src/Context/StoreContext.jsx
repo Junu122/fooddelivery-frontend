@@ -318,7 +318,8 @@ if(!Load){
     FoodLists,
     Orders,
     setOrders,
-    setadminToken
+    setadminToken,
+    setFoodLists
    
   };
   return (
