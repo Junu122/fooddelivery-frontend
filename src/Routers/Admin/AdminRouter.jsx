@@ -6,6 +6,7 @@ import FoodTab from '../../Pages/Admin/FoodTab/FoodTab'
 import Orders from '../../Pages/Admin/Orders/Orders'
 import AdminLogin from '../../Pages/Admin/Login/AdminLogin'
 import PrivateRoute from './ProtectedRoute'
+import PublicRoute from './PublicRoute'
 const AdminRouter = () => {
   return (
     <div >
@@ -30,7 +31,10 @@ const AdminRouter = () => {
              <Orders />
         </PrivateRoute>
        } />
-      <Route path='/login' element={<AdminLogin />} />
+      <Route path='/login' element={
+        <PublicRoute >
+<AdminLogin />
+        </PublicRoute>} />
     </Routes>
     </div>
   )
