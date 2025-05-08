@@ -7,7 +7,7 @@ export const adminService={
     const response=await adminAxiosInstance.post('/admin-login',data)
     return response
    } catch (error) {
-    console.log(error)
+   return error.response
    }
   },
     async userdata(){

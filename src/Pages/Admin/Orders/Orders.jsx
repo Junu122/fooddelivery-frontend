@@ -5,6 +5,7 @@ import '../AdminPanel/AdminPanel.css'
 import { adminService } from '../../../services/adminServices';
 const Orders = () => {
   const {Orders,setOrders}=useContext(Storecontext)
+  
    const updateOrderStatus=async(orderid,status)=>{
       const response=await adminService.updateOrder(orderid,status)
       if(response?.data?.success){
