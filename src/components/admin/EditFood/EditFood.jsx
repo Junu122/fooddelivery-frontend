@@ -3,6 +3,7 @@ import "./EditFood.css";
 import { adminService } from "../../../services/adminServices";
 import { toast } from "react-toastify";
 const EditFood = ({ seteditTab, foodDetails, handleFoodUpdate }) => {
+  const [error,seterror]=useState({})
   const [formData, setformData] = useState({
     name: foodDetails.name || "",
     price: foodDetails.price || "",
@@ -12,14 +13,38 @@ const EditFood = ({ seteditTab, foodDetails, handleFoodUpdate }) => {
 
   const handleinputchange = (e) => {
     const { name, value } = e.target;
+    seterror({})
     setformData({
       ...formData,
       [name]: value,
     });
   };
+
+  const handleinputs=(values)=>{
+    const errors = {};
+    if (!values.name) {
+      errors.name = "name is required";
+    } 
+    if (!values.price) {
+      errors.price = "price is required";
+    }
+    if (!values.description) {
+      errors.description = "description is required";
+    }
+    return errors;
+  }
+
   const handleEdituser = async (e) => {
     e.preventDefault();
     console.log(formData);
+    const errors = handleinputs(formData);
+    console.log(errors)
+    if (Object.keys(errors).length > 0) {
+      seterror(errors);
+      return;
+    }
+    
+    
     const response = await adminService.updateFood(formData, foodDetails._id);
     if (response.data.success) {
       toast.success(response.data.message);
@@ -48,8 +73,9 @@ const EditFood = ({ seteditTab, foodDetails, handleFoodUpdate }) => {
                 type="text"
                 placeholder="Food Name"
                 name="name"
-                required
+                
               />
+              <p className="error-message">{error.name}</p>
             </div>
             <div className="form-group">
               <label htmlFor="price">Price</label>
@@ -60,8 +86,9 @@ const EditFood = ({ seteditTab, foodDetails, handleFoodUpdate }) => {
                 id="price"
                 type="number"
                 placeholder="Food price"
-                required
+                
               />
+                <p className="error-message">{error.price}</p>
             </div>
             <div className="form-group">
               <label htmlFor="description">description</label>
@@ -71,8 +98,9 @@ const EditFood = ({ seteditTab, foodDetails, handleFoodUpdate }) => {
                 id="description"
                 name="description"
                 placeholder="Food description"
-                required
+                
               />
+                <p className="error-message">{error.description}</p>
             </div>
             <div className="form-group">
               <label htmlFor="category">category</label>

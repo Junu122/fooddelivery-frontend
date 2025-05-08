@@ -24,7 +24,7 @@ const AddFood = ({ setActiveTab }) => {
             <div className="form-group">
               <label htmlFor="name">Food Name</label>
               <input
-                id="name"
+                name="name"
                 type="text"
                 placeholder="Food Name"
                 required
@@ -33,7 +33,7 @@ const AddFood = ({ setActiveTab }) => {
             <div className="form-group">
               <label htmlFor="price">Price</label>
               <input
-                id="price"
+                name="price"
                 type="number"
                 placeholder="Food price"
                 required
@@ -42,7 +42,7 @@ const AddFood = ({ setActiveTab }) => {
             <div className="form-group">
               <label htmlFor="description">Price</label>
               <textarea
-                id="description"
+                name="description"
                 type="number"
                 placeholder="Food description"
                 required
@@ -50,7 +50,7 @@ const AddFood = ({ setActiveTab }) => {
             </div>
             <div className="form-group">
               <label htmlFor="category">category</label>
-              <select id="category">
+              <select name="category">
                 <option value="Salads">Salads</option>
                 <option value="Rolls">Rolls</option>
                 <option value="Desserts">Desserts</option>
