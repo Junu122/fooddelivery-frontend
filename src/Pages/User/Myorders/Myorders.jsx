@@ -96,7 +96,7 @@ const Myorders = () => {
         </div>
       ) : (
         <div className="orders-list">
-          {userOrder.map((order) => (
+          {userOrder?.map((order) => (
             <div className="order-card" key={order.orderId}>
               <div className="order-header">
                 <div className="order-id">
