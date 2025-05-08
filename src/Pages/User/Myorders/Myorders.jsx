@@ -14,7 +14,7 @@ const Myorders = () => {
     setmenu('')
    const orderData=async()=>{
     const orderresponse=await userServices.myOrders()
-    console.log(orderresponse)
+    console.log(orderresponse,"......................")
     if(orderresponse){
       const orderwithimage=orderresponse?.data?.userorders.map((order)=>{
         order.items.map((item)=>{
