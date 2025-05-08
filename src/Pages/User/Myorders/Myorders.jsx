@@ -14,18 +14,10 @@ const Myorders = () => {
     setmenu('')
    const orderData=async()=>{
     const orderresponse=await userServices.myOrders()
-    console.log(orderresponse,"......................")
+    console.log(orderresponse)
     if(orderresponse){
-      const orderwithimage=orderresponse?.data?.userorders.map((order)=>{
-        order.items.map((item)=>{
-          const matchingimage=food_images.find(food=>food.name==item.itemId.name)
-          return{
-            ...item.itemId,
-            image:matchingimage.image
-          }
-        })
-      })
-        setuserOrder(orderwithimage)
+        
+        setuserOrder(orderresponse?.data?.userorders)
     }
    }
    orderData()
@@ -37,7 +29,6 @@ const Myorders = () => {
 
 
 
-  console.log(userOrder,"userorder......................")
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
