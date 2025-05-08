@@ -4,6 +4,7 @@ import './Myorders.css';
 import { Storecontext } from '../../../Context/StoreContext';
 import { userServices } from '../../../services/userServices';
 import OrderTracking from '../../../components/user/OrderTracking/OrderTracking';
+import { food_images } from '../../../assets/assets';
 const Myorders = () => {
    const { menu, setmenu } = useContext(Storecontext);
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,16 @@ const Myorders = () => {
     const orderresponse=await userServices.myOrders()
     console.log(orderresponse)
     if(orderresponse){
-        setuserOrder(orderresponse?.data?.userorders)
+      const orderwithimage=orderresponse?.data?.userorders.map((order)=>{
+        order.items.map((item)=>{
+          const matchingimage=food_images.find(food=>food.name==item.itemId.name)
+          return{
+            ...item.itemId,
+            image:matchingimage.image
+          }
+        })
+      })
+        setuserOrder(orderwithimage)
     }
    }
    orderData()
@@ -23,6 +33,9 @@ const Myorders = () => {
   
     setLoading(false);
   }, []);
+
+
+
 
   console.log(userOrder,"userorder......................")
 
