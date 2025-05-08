@@ -1,48 +1,52 @@
 // MyOrdersPage.jsx
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Myorders.css';
 import { Storecontext } from '../../../Context/StoreContext';
 import { userServices } from '../../../services/userServices';
 import OrderTracking from '../../../components/user/OrderTracking/OrderTracking';
 import { food_images } from '../../../assets/assets';
 const Myorders = () => {
-   const { menu, setmenu } = useContext(Storecontext);
+  const { menu, setmenu } = useContext(Storecontext);
   const [loading, setLoading] = useState(true);
   const [trackingOrderId, setTrackingOrderId] = useState(null);
-  const [userOrder,setuserOrder]=useState([])
-
-
+  const [userOrder, setuserOrder] = useState([]);
 
   useEffect(() => {
-    setmenu('')
-   const orderData=async()=>{
-    const orderresponse=await userServices.myOrders()
-    console.log(orderresponse)
-    if(orderresponse){
+    setmenu('');
+    const orderData = async () => {
+      const orderresponse = await userServices.myOrders();
+      console.log(orderresponse);
+      if (orderresponse) {
         
-        setuserOrder(orderresponse?.data?.userorders)
-    }
-   }
-   orderData()
+        const ordersWithImages = orderresponse?.data?.userorders.map(order => {
+          const itemsWithImages = order.items.map(item => {
+            const matchingImage = food_images.find(food_image => 
+              food_image.name === item.itemId.name
+            );
+            
+            return {
+              ...item,
+              itemId: {
+                ...item.itemId,
+                // Use matching image if found, otherwise keep the original image
+                image: matchingImage ? matchingImage.image : item.itemId.image
+              }
+            };
+          });
+          
+          return {
+            ...order,
+            items: itemsWithImages
+          };
+        });
+        
+        setuserOrder(ordersWithImages);
+      }
+    };
     
-  
+    orderData();
     setLoading(false);
   }, []);
-
-const neworder=userOrder.map((order)=>{
- order.items.map((item)=>{
-  const imagefood=food_images.find(foodimage=>foodimage.name==item.itemId.name);
-  return {
-    ...item.itemId,
-    image:imagefood.image
-  }
- }
- )
-})
-
-console.log(neworder)
-
-
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -91,9 +95,6 @@ console.log(neworder)
     }
   };
 
-
-
-
   if (loading) {
     return <div className="loading-container">Loading your orders...</div>;
   }
@@ -131,14 +132,14 @@ console.log(neworder)
                 {order.items.map((item) => (
                   <div className="order-item" key={item._id}>
                     <div className="item-image">
-                      <img src={item.itemId.image} alt={item.name} />
+                      <img src={item.itemId.image} alt={item.itemId.name} />
                     </div>
                     <div className="item-details">
                       <h4>{item.itemId.name}</h4>
                       <p className="item-quantity">Qty: {item.quantity}</p>
                     </div>
                     <div className="item-price">
-                      ₹{item.itemId.price*item.quantity}
+                      ₹{item.itemId.price * item.quantity}
                     </div>
                   </div>
                 ))}
