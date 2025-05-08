@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const userAxiosInstance = axios.create({
 
-  baseURL: 'http://localhost:4000/api/auth',
+  baseURL: 'https://fooddelivery-backend-dusky.vercel.app/api/auth',
   
 
   timeout: 15000,
@@ -65,7 +65,7 @@ userAxiosInstance.interceptors.response.use(
 //admin axios
 const adminAxiosInstance = axios.create({
 
-  baseURL: 'http://localhost:4000/api/admin',
+  baseURL: 'https://fooddelivery-backend-dusky.vercel.app/api/admin',
   
 
   timeout: 15000,
