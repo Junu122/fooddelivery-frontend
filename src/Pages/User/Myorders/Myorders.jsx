@@ -120,7 +120,7 @@ const Myorders = () => {
                       <p className="item-quantity">Qty: {item.quantity}</p>
                     </div>
                     <div className="item-price">
-                      ₹{item.itemId.price*item.quantity*10}
+                      ₹{item.itemId.price*item.quantity}
                     </div>
                   </div>
                 ))}
