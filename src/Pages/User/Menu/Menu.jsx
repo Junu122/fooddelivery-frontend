@@ -6,19 +6,7 @@ import ExploreMenu from '../../../components/user/ExploreMenu/ExploreMenu';
 import FoodDisplay from '../../../components/user/FoodDisplay/FoodDisplay';
 const Menu = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [menuItems, setMenuItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
   const [category, setcategory] = useState("all");
-
-
-  
-
-
-
- 
-
-
   return (
     <div className="menu-page">
       <header className="header">

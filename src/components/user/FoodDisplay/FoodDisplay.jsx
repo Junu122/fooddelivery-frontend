@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import "./fooddisplay.css"
+import "./FoodDisplay.css"
 import { Storecontext } from '../../../Context/StoreContext'
 import FoodList from '../FoodList/FoodList'
-import { food_images } from '../../../assets/assets'
+
 
 function FoodDisplay({category, searchQuery}) {
   const { food_lists } = useContext(Storecontext);
-  
-
   const [filteredItems, setFilteredItems] = useState([])
   const [menuItems, setMenuItems] = useState([])
   const [visibleItems, setVisibleItems] = useState([])

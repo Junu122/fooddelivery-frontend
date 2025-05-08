@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Storecontext } from "../../../Context/StoreContext";
-import "./placeorder.css";
-import axios from "axios";
+import "./Placeorder.css";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../../utils/Loading/Loading";
 import { userServices } from "../../../services/userServices";
 function PlaceOrder() {
   const navigate = useNavigate();
-    const {getcarttotal, token, food_lists, cartitems,Load,setcartitems } =
+    const {getcarttotal,  cartitems,setcartitems } =
     useContext(Storecontext);
   const [Data, setData] = useState({
     firstname: "",
