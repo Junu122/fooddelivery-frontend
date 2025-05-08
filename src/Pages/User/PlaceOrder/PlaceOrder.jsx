@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Storecontext } from "../../../Context/StoreContext";
-import "./Placeorder.css";
+import "./PlaceOrder.css";
 import { useNavigate } from "react-router-dom";
 import { userServices } from "../../../services/userServices";
 function PlaceOrder() {
