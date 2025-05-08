@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react'
 import "./FoodDisplay.css"
 import { Storecontext } from '../../../Context/StoreContext'
 import FoodList from '../FoodList/FoodList'
-
+import { food_images } from '../../../assets/assets'
 
 function FoodDisplay({category, searchQuery}) {
   const { food_lists } = useContext(Storecontext);
@@ -14,11 +14,18 @@ function FoodDisplay({category, searchQuery}) {
   const loaderRef = useRef(null)
   const ITEMS_PER_PAGE = 8 
 
+  const foodWithImage = food_lists.map((food)=>{
+     const matchingImage=food_images.find(food_image=>food_image.name==food.name)
+     return{
+      ...food,
+      image:matchingImage.image 
+     }
+  })
 
   
   useEffect(() => {
-    setFilteredItems(food_lists)
-    setMenuItems(food_lists)
+    setFilteredItems(foodWithImage)
+    setMenuItems(foodWithImage)
   }, [food_lists])
 
  

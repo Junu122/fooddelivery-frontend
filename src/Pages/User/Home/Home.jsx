@@ -7,12 +7,8 @@ const Home = () => {
   
   return (
     <>
-   
       <Header />
-     
       <FeaturedFood />
-      
-      
       <Works />
 </>
     
