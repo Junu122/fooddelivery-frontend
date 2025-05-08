@@ -10,6 +10,9 @@ const Myorders = () => {
   const [loading, setLoading] = useState(true);
   const [trackingOrderId, setTrackingOrderId] = useState(null);
   const [userOrder,setuserOrder]=useState([])
+
+
+
   useEffect(() => {
     setmenu('')
    const orderData=async()=>{
@@ -26,7 +29,18 @@ const Myorders = () => {
     setLoading(false);
   }, []);
 
+const neworder=userOrder.map((order)=>{
+ order.items.map((item)=>{
+  const imagefood=food_images.find(foodimage=>foodimage.name==item.itemId.name);
+  return {
+    ...item.itemId,
+    image:imagefood.image
+  }
+ }
+ )
+})
 
+console.log(neworder)
 
 
 

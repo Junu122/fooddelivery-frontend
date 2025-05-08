@@ -4,7 +4,7 @@ const FeaturedFoodCard = ({food}) => {
   return (
       <div className="special-menu-card">
             <div className="food-img">
-              <img src='../../../assets/food1.png' alt="Margherita Pizza" />
+              <img src={food.image} alt="Margherita Pizza" />
             </div>
             <div className="food-info">
               <h3>{food.name}</h3>
