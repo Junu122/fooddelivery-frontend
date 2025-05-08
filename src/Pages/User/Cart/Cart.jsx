@@ -36,9 +36,9 @@ function Cart() {
                     <div className="cart-items-item">
                       <p data-label="Item:">{itemDetails?.name}</p>
                       <p data-label="Category:">{itemDetails.category}</p>
-                      <p data-label="Price:">&#8377;{itemDetails?.price * 10}</p>
+                      <p data-label="Price:">&#8377;{itemDetails?.price }</p>
                       <p data-label="Quantity:">{cartitem?.quantity}</p>
-                      <p data-label="Total:">&#8377;{cartitem?.quantity * itemDetails.price * 10}</p>
+                      <p data-label="Total:">&#8377;{cartitem?.quantity * itemDetails.price }</p>
                       <p
                         className="cross"
                         onClick={() => {

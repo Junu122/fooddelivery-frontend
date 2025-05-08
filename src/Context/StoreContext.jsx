@@ -234,7 +234,7 @@ const Storecontextprovider = (props) => {
         typeof item.itemId === "object"
           ? item.itemId
           : food_lists?.find((food) => food._id === item.itemId);
-      carttotal += item.quantity * (cart.price * 10);
+      carttotal += item.quantity * (cart.price);
     });
     return carttotal;
   };
