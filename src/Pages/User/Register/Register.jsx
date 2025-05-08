@@ -10,7 +10,7 @@ import { userServices } from "../../../services/userServices";
 function Register({}) {
   const navigate = useNavigate();
   const [data, setdata] = useState({});
-  const { settoken, token } = useContext(Storecontext);
+  const { settoken } = useContext(Storecontext);
 
   const [errorMessage, seterrorMessage] = useState({
     email: "",
